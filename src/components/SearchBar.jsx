@@ -1,44 +1,48 @@
 import React, { useState } from 'react';
 import { Search } from 'lucide-react';
 
-const SearchBar = ({ onSearch }) => {
-  const [input, setInput] = useState('');
+const SearchBar = ({ onSearch, placeholder = 'Search for a city...', defaultValue = '' }) => {
+  const [input, setInput] = useState(defaultValue);
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if (input.trim()) {
-      onSearch(input.trim());
-      setInput('');
+  const handleSubmit = (event) => {
+    event.preventDefault();
+
+    if (!input.trim()) {
+      return;
     }
+
+    onSearch(input.trim());
+    setInput('');
   };
 
   const quickCities = ['London', 'New York', 'Tokyo', 'Paris', 'Sydney'];
 
   return (
-    <div className="w-full md:w-1/2">
+    <div className="w-full">
       <form onSubmit={handleSubmit} className="relative">
         <input
           type="text"
           value={input}
-          onChange={(e) => setInput(e.target.value)}
-          placeholder="Search for a city..."
-          className="w-full px-6 py-3 rounded-lg bg-white text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-400 shadow-lg"
+          onChange={(event) => setInput(event.target.value)}
+          placeholder={placeholder}
+          className="w-full rounded-2xl border border-slate-200 bg-white px-5 py-3.5 text-slate-800 shadow-sm outline-none transition focus:border-sky-400 focus:ring-2 focus:ring-sky-200"
         />
         <button
           type="submit"
-          className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-blue-600 transition-colors"
+          className="absolute right-3 top-1/2 -translate-y-1/2 rounded-full bg-sky-100 p-2 text-sky-700 transition hover:bg-sky-200"
+          aria-label="Search weather"
         >
-          <Search className="w-5 h-5" />
+          <Search className="h-4 w-4" />
         </button>
       </form>
-      
-      {/* Quick City Buttons */}
-      <div className="flex flex-wrap gap-2 mt-4">
+
+      <div className="mt-4 flex flex-wrap gap-2">
         {quickCities.map((quickCity) => (
           <button
             key={quickCity}
+            type="button"
             onClick={() => onSearch(quickCity)}
-            className="px-4 py-2 bg-white bg-opacity-20 text-white rounded-full hover:bg-opacity-30 transition-all text-sm font-medium"
+            className="rounded-full bg-slate-100 px-3 py-1.5 text-sm font-medium text-slate-700 transition hover:bg-slate-200"
           >
             {quickCity}
           </button>
